@@ -39,5 +39,14 @@ crossDecadaComRoomType.plot.bar(title='Distribuição de preço médio por tipo 
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 6. Quais bairros possuem mais listagens com reserva instantânea?")
+
+filtroInstantBookable = df.loc[df['instant_bookable'] == True]
+instantBookablePorBairro = filtroInstantBookable.groupby('neighbourhood')['instant_bookable'].value_counts()
+
+crossInstantBookableNeighbourhoodGroup = pd.crosstab(index=filtroInstantBookable['instant_bookable'],
+                                                    columns=filtroInstantBookable['neighbourhood group'])
+
+display(crossInstantBookableNeighbourhoodGroup)
+
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
