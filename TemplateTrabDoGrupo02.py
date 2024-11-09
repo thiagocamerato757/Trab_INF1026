@@ -1,7 +1,7 @@
 """
     nome dos integrantes do grupo:
     - Thiago Pereira Camerato - 2212580 33B
-    -
+    - Felipe Benevolo Rieken Pinto - 2110368 33B
     -
     -
 """
@@ -23,4 +23,5 @@ print("\n 5. Como o preço é distribuído entre os diferentes anos de construç
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 6. Quais bairros possuem mais listagens com reserva instantânea?")
+print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
