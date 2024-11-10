@@ -3,7 +3,7 @@
     nome dos integrantes do grupo:
     - Thiago Pereira Camerato - 2212580 33B
     - Felipe Benevolo Rieken Pinto - 2110368 33B
-    -
+    - Hugo Da Silva Freires - 2321223 33B
     -
 """
 import pandas as pd
