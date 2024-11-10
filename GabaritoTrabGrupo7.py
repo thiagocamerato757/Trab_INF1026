@@ -6,55 +6,73 @@
     - Hugo Da Silva Freires - 2321223 33B
     -
 """
-import pandas as pd
-import matplotlib.pyplot as plt
 
 import pandas as pd
 import matplotlib.pyplot as plt
 
 # Carrega os dados do arquivo CSV
-df = pd.read_csv('Airbnb_Open_Data.csv')
+print("Carregando os dados do arquivo CSV...")
+df = pd.read_csv('Airbnb_Open_Data.csv', low_memory=False)
 
 # Remove a coluna 'license' do DataFrame
+print("Removendo a coluna 'license'...")
 df.drop('license', axis=1, inplace=True)
 
 # Remove a coluna 'house_rules' do DataFrame
+print("Removendo a coluna 'house_rules'...")
 df.drop('house_rules', axis=1, inplace=True)
 
 # Remove as colunas 'id', 'host id', 'host name' e 'host_identity_verified' do DataFrame
+print("Removendo as colunas 'id', 'host name' e 'host_identity_verified'...")
 df.drop(['id', 'host name', 'host_identity_verified'], axis=1, inplace=True)
 
 # Remove as colunas 'country' e 'country code' do DataFrame
+print("Removendo as colunas 'country' e 'country code'...")
 df.drop(['country', 'country code'], axis=1, inplace=True)
 
 # Remove a coluna 'last review' do DataFrame
+print("Removendo a coluna 'last review'...")
 df.drop(['last review'], axis=1, inplace=True)
 
 # Converte a coluna 'price' de string para float, removendo os caracteres '$' e ','
+print("Convertendo a coluna 'price' de string para float...")
 df['price'] = df['price'].str.replace('$', '').str.replace(',', '').astype('float64')
 
 # Converte a coluna 'service fee' de string para float, removendo os caracteres '$' e ','
+print("Convertendo a coluna 'service fee' de string para float...")
 df['service fee'] = df['service fee'].str.replace('$', '').str.replace(',', '').astype('float64')
 
 # Filtra o DataFrame para incluir apenas linhas onde 'minimum nights' é maior ou igual a 0
+print("Filtrando o DataFrame para incluir apenas linhas onde 'minimum nights' é maior ou igual a 0...")
 df = df[df['minimum nights'] >= 0]
 
 # Filtra o DataFrame para incluir apenas linhas onde 'availability 365' é maior ou igual a 0
+print("Filtrando o DataFrame para incluir apenas linhas onde 'availability 365' é maior ou igual a 0...")
 df = df[df['availability 365'] >= 0]
 
+# Corrige o nome do bairro 'brookln' para 'Brooklyn'
+print("Corrigindo o nome do bairro 'brookln' para 'Brooklyn'...")
 df['neighbourhood group'] = df['neighbourhood group'].replace({'brookln': 'Brooklyn'})
 
 # Preenche valores ausentes na coluna 'price' com 0
+print("Preenchendo valores ausentes na coluna 'price' com 0...")
 df['price'] = df['price'].fillna(0.0)
+
+# Preenche valores ausentes na coluna 'review rate number' com a moda
+print("Preenchendo valores ausentes na coluna 'review rate number' com a moda...")
+moda_review_rate = df['review rate number'].mode()[0]
+df['review rate number'] = df['review rate number'].fillna(moda_review_rate)
 
 print("\n-----------------------------------------------------")
 print("\n 1. Qual é o valor médio de uma diária por room type e neighbourhood group?\n")
 
 # Sumarização 7B: Média do preço agrupada por 'room type' e 'neighbourhood group'
+print("Calculando a média do preço agrupada por 'room type' e 'neighbourhood group'...")
 media_preco = df.groupby(['room type', 'neighbourhood group'])['price'].mean().unstack()
 print(media_preco)
 
 # Gráfico 6A: Gráfico de barras comparando o preço médio por tipo de quarto em cada bairro
+print("Gerando gráfico de barras comparando o preço médio por tipo de quarto em cada bairro...")
 media_preco.plot(kind='bar', figsize=(13, 15), title='Preço médio por tipo de quarto e bairro')
 plt.xlabel('Tipo de Quarto')
 plt.ylabel('Preço Médio')
@@ -62,11 +80,14 @@ plt.show()
 
 print("\n-----------------------------------------------------")
 print("\n 2. Qual é a distribuição de avaliações dos hosts por número de propriedades?\n")
+
 # Tabela de frequência 5A: Tabela com a frequência absoluta da quantidade de propriedades por host
+print("Criando tabela de frequência com a quantidade de propriedades por host...")
 frequencia_propriedades_por_host = df['host id'].value_counts()
 print(frequencia_propriedades_por_host)
 
 # Sumarização 7C: Agrupamento por 'host id' e análise da média de 'review rate number' e 'calculated host listings count'
+print("Agrupando por 'host id' e analisando a média de 'review rate number' e 'calculated host listings count'...")
 agrupamento_host = df.groupby('host id').agg({
     'review rate number': 'mean',
     'calculated host listings count': 'mean'
@@ -74,6 +95,7 @@ agrupamento_host = df.groupby('host id').agg({
 print(agrupamento_host)
 
 # Gráfico 6B: Histograma ou gráfico de densidade da distribuição de avaliações dos hosts
+print("Gerando histograma e gráfico de densidade da distribuição de avaliações dos hosts...")
 plt.figure(figsize=(10, 6))
 agrupamento_host['review rate number'].plot(kind='hist', bins=30, density=True, alpha=0.6, color='g')
 agrupamento_host['review rate number'].plot(kind='kde', color='r')
@@ -83,7 +105,6 @@ plt.ylabel('Densidade')
 plt.show()
 
 print("\n-----------------------------------------------------")
-print("\n-----------------------------------------------------")
 print("\n 3. Quais bairros possuem a maior e menor disponibilidade média de dias no ano?")
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
@@ -92,27 +113,31 @@ print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 5. Como o preço é distribuído entre os diferentes anos de construção das propriedades?\n")
 
-
-df['Decada Construcao'] = pd.cut(df['Construction year'], bins=[df['Construction year'].min(), 2010, 
-                                           2020, df['Construction year'].max()], 
+print("Criando coluna 'Decada Construcao' com base no ano de construção...")
+df['Decada Construcao'] = pd.cut(df['Construction year'], bins=[df['Construction year'].min(), 2010,
+                                           2020, df['Construction year'].max()],
                                      labels=['2000', '2010', '2020'], include_lowest=True)
 
+print("Criando tabela cruzada com a média de preço por tipo de quarto e década de construção...")
 crossDecadaComRoomType = pd.crosstab(index=df['Decada Construcao'],
                                      columns=df['room type'],
                                      values=df['price'],
                                      aggfunc='mean')
 
 print(crossDecadaComRoomType)
+print("Gerando gráfico de barras da distribuição de preço médio por tipo de quarto por década...")
 crossDecadaComRoomType.plot.bar(title='Distribuição de preço médio por tipo de quarto por década')
 plt.show()
 
 print("\n-----------------------------------------------------")
-print("\n-----------------------------------------------------")
 print("\n 6. Quais bairros possuem mais listagens com reserva instantânea?\n")
 
+print("Filtrando listagens com reserva instantânea...")
 filtroInstantBookable = df.loc[df['instant_bookable'] == True]
+print("Agrupando listagens com reserva instantânea por bairro...")
 instantBookablePorBairro = filtroInstantBookable.groupby('neighbourhood')['instant_bookable'].value_counts()
 
+print("Criando tabela cruzada de listagens com reserva instantânea por grupo de bairro...")
 crossInstantBookableNeighbourhoodGroup = pd.crosstab(index=filtroInstantBookable['instant_bookable'],
                                                     columns=filtroInstantBookable['neighbourhood group'])
 
