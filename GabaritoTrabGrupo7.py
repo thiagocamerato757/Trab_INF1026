@@ -109,6 +109,42 @@ print("\n 3. Quais bairros possuem a maior e menor disponibilidade média de dia
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 4. Existe uma correlação entre a política de cancelamento e a taxa de avaliações mensais?")
+# Quesito 1: Duas estratégias de preenchimento de valores ausentes na coluna 'review rate number'
+# Estratégia 1: Substituir valores ausentes por 0
+df['review rate number fill_0'] = df['review rate number'].fillna(0)
+
+# Estratégia 2: Substituir valores ausentes pela média de 'review rate number' agrupada por 'cancellation_policy'
+df['review rate number fill_policy_mean'] = df.groupby('cancellation_policy')['review rate number'].transform(lambda x: x.fillna(x.mean()))
+
+# Quesito 3B: Criar categorias para 'review rate number' em faixas definidas
+# Definimos categorias para simplificar a análise (baixa, média, alta taxa de avaliação)
+df['review_rate_category'] = pd.cut(df['review rate number'], bins=[0, 2, 4, 5], labels=['Baixa', 'Média', 'Alta'])
+
+# Quesito 7C: Agrupamento estruturado por 'cancellation_policy' e 'review rate number'
+# Calculamos a média da 'review rate number' para cada política de cancelamento
+agrupamento_cancelamento_avaliacoes = df.groupby('cancellation_policy')['review rate number'].mean()
+print("Média de avaliações mensais por política de cancelamento:")
+print(agrupamento_cancelamento_avaliacoes)
+print("Logo percebemos que não tem correlação entre avaliações mensais e politica de cancelamento")
+
+# Visualização da média de avaliações mensais por política de cancelamento
+agrupamento_cancelamento_avaliacoes.plot(kind='bar', color='skyblue', figsize=(10, 6),
+                                         title='Média de Avaliações Mensais por Política de Cancelamento')
+plt.xlabel('Política de Cancelamento')
+plt.ylabel('Média de Avaliações Mensais')
+plt.show()
+
+# Quesito 8A: Cruzamento entre 'review_rate_category' e 'cancellation_policy' para frequência de avaliações em cada política
+cross_review_rate_cancel_policy = pd.crosstab(df['review_rate_category'], df['cancellation_policy'])
+print("Cruzamento entre categorias de taxa de avaliação e política de cancelamento:")
+print(cross_review_rate_cancel_policy)
+
+# Visualização do cruzamento para comparar a frequência das categorias de avaliação para cada política
+cross_review_rate_cancel_policy.plot(kind='bar', stacked=True, figsize=(10, 6),
+                                     title='Frequência de Avaliações por Categoria e Política de Cancelamento')
+plt.xlabel('Categoria de Taxa de Avaliação')
+plt.ylabel('Frequência')
+plt.show()
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 5. Como o preço é distribuído entre os diferentes anos de construção das propriedades?\n")
