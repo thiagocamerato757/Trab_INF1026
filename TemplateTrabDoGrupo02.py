@@ -3,7 +3,7 @@
     - Thiago Pereira Camerato - 2212580 33B
     - Felipe Benevolo Rieken Pinto - 2110368 33B
     - Hugo Da Silva Freires - 2321223 33B
-    -
+    - Bruno Miksucas Pimenta - 2110717 33B
 """
 
 print("\n-----------------------------------------------------")
@@ -23,5 +23,14 @@ print("\n 5. Como o preço é distribuído entre os diferentes anos de construç
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 6. Quais bairros possuem mais listagens com reserva instantânea?")
+print("\n-----------------------------------------------------")
+print("\n-----------------------------------------------------")
+print("\n 7. Qual a distribuição do ano de construção de casas/apt em Chinatown?")
+print("\n-----------------------------------------------------")
+print("\n-----------------------------------------------------")
+print("\n 8. Qual o percentual de cada tipo de hospedagem?")
+print("\n-----------------------------------------------------")
+print("\n-----------------------------------------------------")
+print("\n 9. A faixa de preço influencia na review?")
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")

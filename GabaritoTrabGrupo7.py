@@ -106,6 +106,15 @@ plt.show()
 
 print("\n-----------------------------------------------------")
 print("\n 3. Quais bairros possuem a maior e menor disponibilidade média de dias no ano?")
+# Quesito 7A: Sumarização Geral
+# Verificando existência de valores acima de 365, que não deveriam existir e tendenciariam as médias
+max_dias_disponiveis = df['availability 365'].max()
+print('Valor máximo na tabela de dias disponíveis em um ano de um airbnb:', max_dias_disponiveis)
+df = df[df['availability 365'] <= 365]
+agrupamento_bairro = df.groupby('neighbourhood').agg({'availability 365': 'mean'})
+print(agrupamento_bairro.sort_values(by='availability 365'))
+print('Bairro com maior disponibilidade média:', agrupamento_bairro.idxmax().values)
+print('Bairro com menor disponibilidade média:', agrupamento_bairro.idxmin().values)
 print("\n-----------------------------------------------------")
 print("\n-----------------------------------------------------")
 print("\n 4. Existe uma correlação entre a política de cancelamento e a taxa de avaliações mensais?")
@@ -180,4 +189,26 @@ crossInstantBookableNeighbourhoodGroup = pd.crosstab(index=filtroInstantBookable
 print(crossInstantBookableNeighbourhoodGroup)
 
 print("\n-----------------------------------------------------")
+# Requisito 4C: Filtro Composto
+# Requisito 8C: Cruzamento de colunas estruturado
+print("\n 7. Qual a distribuição da data de construção de casas/apt em Chinatown? A data tem relação forte com a avaliação dessas hospedagens?")
+df_neighbourhood_id = df.set_index('neighbourhood')
+casas_apt_chinatown =df_neighbourhood_id[(df_neighbourhood_id.index == 'Chinatown') & (df_neighbourhood_id['room type'] == 'Entire home/apt')]
+cross_chinatown_ano_review = pd.crosstab(index = casas_apt_chinatown['room type'],
+                                  columns = [casas_apt_chinatown['Decada Construcao'], casas_apt_chinatown['review rate number']])
+print(cross_chinatown_ano_review)
+print("\n-----------------------------------------------------")
+# Requisito 5B: Tabela de frequência com valores percentuais
+print("\n 8. Qual o percentual de cada tipo de hospedagem?")
+percentual_tipo_hospedagem = df['room type'].value_counts(normalize=True)*100
+print(percentual_tipo_hospedagem)
+print("\n-----------------------------------------------------")
+print("\n 9. A faixa de preço influencia na review?")
+# Requisito 3B: Categorias com min e max
+# Requisito 8D: Cruzamento de colunas simples
+df['price category'] = pd.cut(df['price'], bins=[df['price'].min(), 250, 450, 650, 850, df['number of reviews'].max()],
+                                          labels=['MB', 'B', 'N', 'C', 'MC'], include_lowest = True)
+cross_numreviews_reviewvalues = pd.crosstab(index = df['review rate number'],
+                                            columns = df['price category'])
+print(cross_numreviews_reviewvalues)
 print("\n-----------------------------------------------------")
