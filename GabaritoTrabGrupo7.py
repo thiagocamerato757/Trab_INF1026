@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    nome dos integrantes do grupo:
+    Nome dos integrantes do Grupo 7:
     - Thiago Pereira Camerato - 2212580 33B
     - Felipe Benevolo Rieken Pinto - 2110368 33B
     - Hugo Da Silva Freires - 2321223 33B
@@ -107,6 +107,8 @@ plt.show()
 print("\n-----------------------------------------------------")
 print("\n 3. Quais bairros possuem a maior e menor disponibilidade média de dias no ano?")
 # Quesito 7A: Sumarização Geral
+# Quesito 7B: Sumarização com Grupos simples
+# Quesito 4A: Filtro por valor
 # Verificando existência de valores acima de 365, que não deveriam existir e tendenciariam as médias
 max_dias_disponiveis = df['availability 365'].max()
 print('Valor máximo na tabela de dias disponíveis em um ano de um airbnb:', max_dias_disponiveis)
