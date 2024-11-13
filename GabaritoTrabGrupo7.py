@@ -133,11 +133,16 @@ df['review rate number fill_policy_mean'] = df.groupby('cancellation_policy')['r
 df['review_rate_category'] = pd.cut(df['review rate number'], bins=3, labels=['Baixa', 'Média', 'Alta'])
 
 # Quesito 7C: Agrupamento estruturado por 'cancellation_policy' e 'review rate number'
-# Calculamos a média da 'review rate number' para cada política de cancelamento
-agrupamento_cancelamento_avaliacoes = df.groupby('cancellation_policy')['review rate number'].mean()
-print("Média de avaliações mensais por política de cancelamento:")
+print("\n-----------------------------------------------------")
+print("\nMédia de avaliações mensais por política de cancelamento e tipo de quarto:")
+
+# Agrupamento estruturado por 'cancellation_policy' e 'room type', calculando a média de 'review rate number'
+agrupamento_cancelamento_avaliacoes = df.groupby(['cancellation_policy', 'room type'])['review rate number'].mean()
+
 print(agrupamento_cancelamento_avaliacoes)
-print("Logo percebemos que não tem correlação entre avaliações mensais e politica de cancelamento")
+print("\nLogo percebemos que não há uma correlação direta entre as avaliações mensais e a política de cancelamento ou o tipo de quarto.")
+
+print("\n-----------------------------------------------------")
 
 # Visualização da média de avaliações mensais por política de cancelamento
 agrupamento_cancelamento_avaliacoes.plot(kind='bar', color='skyblue', figsize=(10, 6),
