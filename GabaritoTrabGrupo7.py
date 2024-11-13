@@ -215,3 +215,18 @@ cross_numreviews_reviewvalues = pd.crosstab(index = df['review rate number'],
                                             columns = df['price category'])
 print(cross_numreviews_reviewvalues)
 print("\n-----------------------------------------------------")
+
+print("\n-----------------------------------------------------")
+print("\n10. Quais listagens no bairro de Manhattan possuem a maior disponibilidade anual para acomodações do tipo 'Private room'?\n")
+
+# Filtro de índice para listar apenas acomodações do tipo 'Private room' no bairro 'Manhattan'
+filtro_manhattan_private = df[(df['room type'] == 'Private room') & (df['neighbourhood group'] == 'Manhattan')]
+
+# Ordena o DataFrame filtrado por 'availability 365' em ordem decrescente para encontrar maior disponibilidade
+listagens_maior_disponibilidade = filtro_manhattan_private.sort_values(by='availability 365', ascending=False).head(10)
+
+# Exibe o resultado com as colunas relevantes
+print("Listagens com a maior disponibilidade anual para 'Private room' em Manhattan:")
+print(listagens_maior_disponibilidade[['NAME', 'availability 365', 'neighbourhood', 'price']])
+
+print("\n-----------------------------------------------------")
