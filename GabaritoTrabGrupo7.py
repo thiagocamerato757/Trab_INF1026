@@ -128,9 +128,9 @@ df['review rate number fill_0'] = df['review rate number'].fillna(0)
 # Estratégia 2: Substituir valores ausentes pela média de 'review rate number' agrupada por 'cancellation_policy'
 df['review rate number fill_policy_mean'] = df.groupby('cancellation_policy')['review rate number'].transform(lambda x: x.fillna(x.mean()))
 
-# Quesito 3B: Criar categorias para 'review rate number' em faixas definidas
+# Quesito 3A: Categorias com bins igual a número de categorias
 # Definimos categorias para simplificar a análise (baixa, média, alta taxa de avaliação)
-df['review_rate_category'] = pd.cut(df['review rate number'], bins=[0, 2, 4, 5], labels=['Baixa', 'Média', 'Alta'])
+df['review_rate_category'] = pd.cut(df['review rate number'], bins=3, labels=['Baixa', 'Média', 'Alta'])
 
 # Quesito 7C: Agrupamento estruturado por 'cancellation_policy' e 'review rate number'
 # Calculamos a média da 'review rate number' para cada política de cancelamento
@@ -183,7 +183,7 @@ print("\n 6. Quais bairros possuem mais listagens com reserva instantânea?\n")
 print("Filtrando listagens com reserva instantânea...")
 filtroInstantBookable = df.loc[df['instant_bookable'] == True]
 print("Agrupando listagens com reserva instantânea por bairro...")
-instantBookablePorBairro = filtroInstantBookable.groupby('neighbourhood')['instant_bookable'].value_counts()
+#instantBookablePorBairro = filtroInstantBookable.groupby('neighbourhood')['instant_bookable'].value_counts()
 
 print("Criando tabela cruzada de listagens com reserva instantânea por grupo de bairro...")
 crossInstantBookableNeighbourhoodGroup = pd.crosstab(index=filtroInstantBookable['instant_bookable'],
@@ -217,16 +217,13 @@ print(cross_numreviews_reviewvalues)
 print("\n-----------------------------------------------------")
 
 print("\n-----------------------------------------------------")
-print("\n10. Quais listagens no bairro de Manhattan possuem a maior disponibilidade anual para acomodações do tipo 'Private room'?\n")
+print("\n10. Listagem de hospedagens entre ID 10000 e 20000 no distrito de Manhattan que tem o número de noites mínimas pra reserva acima de 7\n")
 
-# Filtro de índice para listar apenas acomodações do tipo 'Private room' no bairro 'Manhattan'
-filtro_manhattan_private = df[(df['room type'] == 'Private room') & (df['neighbourhood group'] == 'Manhattan')]
-
-# Ordena o DataFrame filtrado por 'availability 365' em ordem decrescente para encontrar maior disponibilidade
-listagens_maior_disponibilidade = filtro_manhattan_private.sort_values(by='availability 365', ascending=False).head(10)
-
+# Quesito 4A: Filtro de valor
+# Quesito 4B: Filtro de índice
+filtro_manhattan_7nights = df[(df['minimum nights'] > 7) & (df['neighbourhood group'] == 'Manhattan')]
+hospedagens_10000_20000 = filtro_manhattan_7nights[(filtro_manhattan_7nights.index > 10000) & (filtro_manhattan_7nights.index < 20000)]
 # Exibe o resultado com as colunas relevantes
-print("Listagens com a maior disponibilidade anual para 'Private room' em Manhattan:")
-print(listagens_maior_disponibilidade[['NAME', 'availability 365', 'neighbourhood', 'price']])
+print(hospedagens_10000_20000[['NAME', 'room type', 'minimum nights']])
 
 print("\n-----------------------------------------------------")
