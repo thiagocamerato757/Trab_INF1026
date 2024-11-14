@@ -67,7 +67,7 @@ df['review rate number'] = df['review rate number'].fillna(moda_review_rate)
 print("\n-----------------------------------------------------")
 print("\n 1. Qual é o valor médio de uma diária por room type e neighbourhood group?\n")
 
-# Sumarização 7B: Média do preço agrupada por 'room type' e 'neighbourhood group'
+# Sumarização 7C: Média do preço agrupada por 'room type' e 'neighbourhood group'
 print("Calculando a média do preço agrupada por 'room type' e 'neighbourhood group'...")
 media_preco = df.groupby(['room type', 'neighbourhood group'])['price'].mean().unstack()
 print(media_preco)
@@ -87,7 +87,7 @@ print("Criando tabela de frequência com a quantidade de propriedades por host..
 frequencia_propriedades_por_host = df['host id'].value_counts()
 print(frequencia_propriedades_por_host)
 
-# Sumarização 7C: Agrupamento por 'host id' e análise da média de 'review rate number' e 'calculated host listings count'
+# Sumarização 7B: Agrupamento por 'host id' e análise da média de 'review rate number' e 'calculated host listings count'
 print("Agrupando por 'host id' e analisando a média de 'review rate number' e 'calculated host listings count'...")
 agrupamento_host = df.groupby('host id').agg({
     'review rate number': 'mean',
@@ -96,11 +96,15 @@ agrupamento_host = df.groupby('host id').agg({
 print(agrupamento_host)
 
 # Gráfico 6B: Histograma ou gráfico de densidade da distribuição de avaliações dos hosts
-print("Gerando histograma  da distribuição de avaliações dos hosts...")
+print("Gerando histograma e gráfico de densidade da distribuição de avaliações dos hosts...")
 plt.figure(figsize=(10, 6))
 agrupamento_host['review rate number'].plot(kind='hist', bins=30, density=True, alpha=0.6, color='g')
-plt.title('Distribuição de Avaliações dos Hosts')
+#agrupamento_host['review rate number'].plot(kind='kde', color='r')
+#plt.title('Distribuição de Avaliações dos Hosts')
+#plt.xlabel('Número de Avaliações')
+#plt.ylabel('Densidade')
 plt.show()
+
 
 print("\n-----------------------------------------------------")
 print("\n 3. Quais bairros possuem a maior e menor disponibilidade média de dias no ano?")
