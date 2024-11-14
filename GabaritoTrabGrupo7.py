@@ -96,13 +96,10 @@ agrupamento_host = df.groupby('host id').agg({
 print(agrupamento_host)
 
 # Gráfico 6B: Histograma ou gráfico de densidade da distribuição de avaliações dos hosts
-print("Gerando histograma e gráfico de densidade da distribuição de avaliações dos hosts...")
+print("Gerando histograma  da distribuição de avaliações dos hosts...")
 plt.figure(figsize=(10, 6))
 agrupamento_host['review rate number'].plot(kind='hist', bins=30, density=True, alpha=0.6, color='g')
-agrupamento_host['review rate number'].plot(kind='kde', color='r')
 plt.title('Distribuição de Avaliações dos Hosts')
-plt.xlabel('Número de Avaliações')
-plt.ylabel('Densidade')
 plt.show()
 
 print("\n-----------------------------------------------------")
